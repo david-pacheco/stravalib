@@ -97,7 +97,7 @@ class Client(object):
         :param scope: The access scope required.  Omit to imply "public".
                       Valid values are 'read', 'read_all', 'profile:read_all', 'profile:write', 'profile:read_all',
                       'activity:read_all', 'activity:write'
-        :type scope: str
+        :type scope: list[str]
 
         :param state: An arbitrary variable that will be returned to your application in the redirect URI.
         :type state: str
