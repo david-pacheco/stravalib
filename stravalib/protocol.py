@@ -4,12 +4,11 @@ Low-level classes for interacting directly with the Strava API webservers.
 from __future__ import division, absolute_import, print_function, unicode_literals
 import abc
 import logging
-from six.moves.urllib.parse import urlunsplit, urljoin, urlencode
 import functools
 
-import six
-
 import requests
+import six
+from six.moves.urllib.parse import urlunsplit, urljoin, urlencode
 
 from stravalib import exc
 
@@ -47,7 +46,7 @@ class ApiV3(object):
         if rate_limiter is None:
             # Make it a dummy function, so we don't have to check if it's defined before
             # calling it later
-            rate_limiter = lambda: None
+            rate_limiter = lambda x=None: None
 
         self.rate_limiter = rate_limiter
 
@@ -55,7 +54,7 @@ class ApiV3(object):
         """
         Get the URL needed to authorize your application to access a Strava user's information.
 
-        See http://strava.github.io/api/v3/oauth/
+        See https://developers.strava.com/docs/authentication/
 
         :param client_id: The numeric developer client id.
         :type client_id: int
@@ -67,10 +66,10 @@ class ApiV3(object):
                                 Choices are 'auto' or 'force'.  (Default is 'auto')
         :type approval_prompt: str
 
-        :param scope: The access scope required.  Omit to imply "public".
+        :param scope: The access scope required.  Omit to imply "read" and "activity:read"
                       Valid values are 'read', 'read_all', 'profile:read_all', 'profile:write', 'profile:read_all',
                       'activity:read_all', 'activity:write'.
-        :type scope: str
+        :type scope: list[str]
 
         :param state: An arbitrary variable that will be returned to your application in the redirect URI.
         :type state: str
@@ -79,17 +78,20 @@ class ApiV3(object):
         :rtype: str
         """
         assert approval_prompt in ('auto', 'force')
+        if scope is None:
+            scope = ['read', 'activity:read']
+        elif isinstance(scope, (six.text_type, six.binary_type)):
+            scope = [scope]
 
-        if isinstance(scope, str):
-            scope_items = scope.split(',')
-        else:
-            scope_items = scope
+        unsupported = set(scope) - {'read', 'read_all',
+                                    'profile:read_all', 'profile:write',
+                                    'activity:read', 'activity:read_all',
+                                    'activity:write'}
 
-        # validates scope items
-        for scope_item in scope_items:
-            assert scope_item.strip() in (None, 'read', 'read_all', 'profile:read_all', 'profile:write', 'profile:read_all', 'activity:read_all', 'activity:write')
+        assert not unsupported, 'Unsupported scope value(s): {}'.format(unsupported)
 
-        scope = ','.join(scope_items)
+        if isinstance(scope, (list, tuple)):
+            scope = ','.join(scope)
 
         params = {'client_id': client_id,
                   'redirect_uri': redirect_uri,

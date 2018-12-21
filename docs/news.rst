@@ -2,6 +2,21 @@ Changes
 =======
 
 .. contents::
+
+0.10.2
+------
+* More fixes to new new authorization scopes (#168)
+* Added an example oauth app and some small docs updates.
+* Changed missing-attribute warnings to be debug-level logs.
+
+0.10.1
+------
+* Fixes of authorization_url / new scopes for new oauth (#163, #165)
+
+0.10.0
+------
+* Implementation of Strava's new auth.  (#162, #163)
+
 0.9.4
 -----
 * Version bump for dup file upload to pypi. :-[
@@ -10,7 +25,7 @@ Changes
 -----
 * Fix mutable parma defaults in rate-limiter util functions (#155)
 * Add the missing subscription_permissions attr to Athlete (#156)
- 
+
 0.9.2
 -----
 * Fix for pip 0.10.0 (paulte) (#149, #150)
