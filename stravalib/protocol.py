@@ -162,6 +162,23 @@ class ApiV3(object):
 
         return access_info
 
+    def deauthorize(self, access_token):
+        """
+        Deauthorize the application. This causes the application to be removed
+        from the athlete's "My Apps" settings page.
+
+        :param access_token: The access token obtain from a previous authorization request
+        :type access_token: str
+
+        :param access_token:
+        :return:
+        """
+        response = self._request('https://{0}/oauth/deauthorize'.format(self.server),
+                                 params={'access_token': access_token},
+                                 method='POST')
+
+        return response
+
     def _resolve_url(self, url, use_webhook_server):
         server = use_webhook_server and self.server_webhook_events or self.server
         if not url.startswith('http'):

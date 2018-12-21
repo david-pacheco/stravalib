@@ -154,14 +154,17 @@ class Client(object):
                                                   client_secret=client_secret,
                                                   refresh_token=refresh_token)
 
-    def deauthorize(self):
+    def deauthorize(self, access_token):
         """
         Deauthorize the application. This causes the application to be removed
         from the athlete's "My Apps" settings page.
 
+        :param access_token: The access token obtain from a previous authorization request
+        :type access_token: str
+
         See http://strava.github.io/api/v3/oauth/#deauthorization
         """
-        self.protocol.post("oauth/deauthorize")
+        self.protocol.deauthorize(access_token)
 
     def _utc_datetime_to_epoch(self, activity_datetime):
         """
