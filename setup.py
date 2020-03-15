@@ -41,7 +41,7 @@ setup(
     version=version,
     author='David Pacheco',
     author_email='davidpch@gmail.com',
-    url='http://github.com/david-pacheco/stravalib',
+    url='http://github.com/davidpch/stravalib',
     license='Apache',
     description='Python library for interacting with Strava v3 REST API',
     long_description=long_description,
